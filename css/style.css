@@ -33,6 +33,20 @@ div {
 	margin: 2px;
 }
 
+/* Linkki toiseen kieleen */
+#language {
+	border-radius: 5px;
+	background-color: rgba(0, 0, 0, 0.15);
+	text-decoration: none;
+	color: black;
+	padding: 6px 15px 6px 15px;
+	transition: all .2s ease-in-out;
+}
+#language:hover {
+	background-color: rgba(0, 0, 0, 0.25);
+	box-shadow: 0 0 10px rgba(0, 0, 0, 0.25);
+}
+
 /* Sisennykset tekstille */
 .divteksti {
 	max-width: 800px;
