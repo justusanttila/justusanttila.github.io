@@ -37,6 +37,9 @@
 		<!-- Clicky -->
 		<script>var clicky_site_ids = clicky_site_ids || []; clicky_site_ids.push(101281409);</script>
 		<script async src="//static.getclicky.com/js"></script>
+
+		<script src="color-calendar/bundle.js"></script>
+        <link rel="stylesheet" href="color-calendar/css/theme-basic.css">
 	</head>
 
 	<body>
@@ -202,8 +205,11 @@
 
 			<h2>Ota yhteyttä</h2>
 			<p>
-				Voit ottaa minuun yhteyttä sähköpostilla <a href="mailto:info@justusanttila.fi">info@justusanttila.fi</a>. Kerro kuka olet, millaista videota tarvitset ja vielä alustava ajankohta kuvaamiselle. Jos sinulla on jotain kysymyksiä, niin kysy ihmeessä.
+				Voit ottaa minuun yhteyttä sähköpostilla <a href="mailto:info@justusanttila.fi">info@justusanttila.fi</a>. Kerro kuka olet, millaista videota tarvitset ja vielä alustava ajankohta kuvaamiselle. Jos sinulla on jotain kysymyksiä, niin kysy ihmeessä. Alla näet kalenterin, jossa varatut päivät on merkitty punaisilla pisteillä.
 			</p>
+			<br>
+			<div id="color-calendar">
+			</div>
 			<br><br>
 			<div class="logo">
 				<img src="/img/nimitekstisvg.svg">
@@ -225,4 +231,26 @@
 			</div>
 		</div>
 	</body>
+	<!-- JavaScript-->
+	<script>
+        let myCal = new Calendar({
+            id: "#color-calendar",
+            calendarSize: "small",
+            startWeekday: 1,
+            eventsData: listEvents(),
+        });
+		function listEvents(){
+			var result = [] /*[{start: "2022-04-16", end: "2022-04-16"}];*/
+			var events = "2022-03-19,2022-04-9,2022-04-15,2022-05-14,2022-05-27,2022-05-28,2022-08-06,2022-04-21";
+			var list = events.split(',')
+    		while(list.length > 0){ 
+				var date = list.shift();    
+     			result.push({
+        			start: date,
+					end: date,
+				 });
+    		};
+			return result;
+		};
+    </script>
 </html>
