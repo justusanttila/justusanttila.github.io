@@ -3,13 +3,11 @@
 <head>
    <title>Yhteydenotto - Videotuotanto Justus Anttila</title>
    
-   <!-- Metatiedot -->
-   <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+   <!-- Page-Specific Metatiedot -->
    <meta name="keywords" content="videotuotanto yhteydenotto, justus anttila email, turku videokuvaaja, häävideo tarjous, musiikkivideo yhteydenotto">
    <meta name="description" content="Ota yhteyttä Justus Anttilaan videotuotantoon liittyen. Sähköposti: info@justusanttila.fi. Kerro projektistasi ja saat tarjouksen Turusta.">
    <meta name="author" content="Justus Anttila">
-   <!-- Facebook meta-->
+   <!-- Facebook/Open Graph Meta -->
    <meta property="og:type" content="website">
    <meta property="og:title" content="Yhteydenotto - Videotuotanto Justus Anttila">
    <meta property="og:description" content="Ota yhteyttä Justus Anttilaan videotuotantoon liittyen. Sähköposti: info@justusanttila.fi. Kerro projektistasi ja saat tarjouksen Turusta.">
@@ -18,23 +16,8 @@
 
    <!-- Tyylitiedosto -->
    <link rel="stylesheet" type="text/css" href="css/style.css">
-   
-   <!-- Favicon asetukset -->
-   <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
-   <link rel="icon" type="image/x-icon" href="/favicon.ico">
-   <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
-   <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
-   <link rel="manifest" href="/site.webmanifest">
-   <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
-   <meta name="apple-mobile-web-app-title" content="justusanttila.fi">
-   <meta name="application-name" content="justusanttila.fi">
-   <meta name="msapplication-TileColor" content="#ffc40d">
-   <meta name="theme-color" content="#000000"> <!-- Black for dark theme -->
 
-   <!-- Fontti: Poppins -->
-   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;700&display=swap" rel="stylesheet">
-
-   <!-- Structured Data (JSON-LD for SEO: ContactPage with ContactPoint) -->
+   <!-- Page-Specific Structured Data (JSON-LD for SEO: ContactPage with ContactPoint) -->
    <script type="application/ld+json">
    {
       "@context": "https://schema.org",
@@ -62,16 +45,10 @@
       }
    }
    </script>
-
-   <!-- Clicky Analytics -->
-   <script>var clicky_site_ids = clicky_site_ids || []; clicky_site_ids.push(101281409);</script>
-   <script async src="//static.getclicky.com/js"></script>
+   <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
 </head>
 
 <body>
-   <!-- Skip to Content Link for Accessibility -->
-   <a href="#main-content" class="sr-only">Hyppää pääsisältöön</a>
-
    <!-- Navigation Header -->
    <header class="nav" role="banner">
       <a href="/" aria-label="Etusivu">
@@ -134,6 +111,7 @@
             </div>
 
             <button type="submit" class="cta-button">Lähetä viesti</button>
+            <div id="formMessage" class="error" style="display: none; text-align: center; margin-top: var(--spacing-sm);" aria-live="polite"></div>
          </form>
       </section>
    </main>
@@ -141,7 +119,7 @@
    <!-- Footer -->
    <footer class="loppu" role="contentinfo">
       <p>Y-tunnus: 3158053-8</p>
-      <p id="textright">20540 Turku</p>
+      <p id="textright">40500 Jyväskylä</p>
    </footer>
 
     <script defer src="js/script.js"></script>

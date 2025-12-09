@@ -1,73 +1,51 @@
 <!DOCTYPE html>
 <html lang="fi">
 <head>
-   <title>Videotuotanto Justus Anttila</title>
+   <title>Videotuotanto Justus Anttila - Ammattimainen videokuvaus Turusta</title>
    
-   <!-- Metatiedot -->
-   <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-   <meta name="keywords" content="videotuotanto, häävideo, wedding video, musiikkivideo, music video, yritysvideo, corporate video, turku, videokuvaus, videointi, video, elokuva, kuvaaja, kiinteistövideo, asuntovideo, mainosvideo, commercial video, videography, cinematography, video">
-   <meta name="description" content="Kaikenlaista videotuotantoa: häävideoita, musiikkivideoita, yritysvideoita ja ties mitä. Aina edulliset ja kilpailukykyiset hinnat.">
+   <!-- Page-Specific Metatiedot -->
+   <meta name="keywords" content="videotuotanto Turku, Justus Anttila videokuvaaja, häävideo, musiikkivideo, yritysvideo, kiinteistövideo">
+   <meta name="description" content="Justus Anttila tarjoaa ammattimaista videotuotantoa Turusta. Häävideot, musiikkivideot, yritysvideot ja kiinteistövideot. Ota yhteyttä ja saat tarjouksen.">
    <meta name="author" content="Justus Anttila">
-   <!-- Facebook meta-->
+   <!-- Facebook/Open Graph Meta -->
    <meta property="og:type" content="website">
-   <meta property="og:title" content="Videotuotanto Justus Anttila">
-   <meta property="og:description" content="Kaikenlaista videotuotantoa: häävideoita, musiikkivideoita, yritysvideoita ja ties mitä. Aina edulliset ja kilpailukykyiset hinnat.">
+   <meta property="og:title" content="Videotuotanto Justus Anttila - Ammattimainen videokuvaus Turusta">
+   <meta property="og:description" content="Justus Anttila tarjoaa ammattimaista videotuotantoa Turusta. Häävideot, musiikkivideot, yritysvideot ja kiinteistövideot. Ota yhteyttä ja saat tarjouksen.">
    <meta property="og:image" content="https://justusanttila.fi/img/og-kansikuva.jpg">
-   <meta property="og:url" content="https://justusanttila.fi">
+   <meta property="og:url" content="https://justusanttila.fi/">
 
    <!-- Tyylitiedosto -->
    <link rel="stylesheet" type="text/css" href="css/style.css">
-   
-   <!-- Favicon asetukset -->
-   <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
-   <link rel="icon" type="image/x-icon" href="/favicon.ico">
-   <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
-   <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
-   <link rel="manifest" href="/site.webmanifest">
-   <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
-   <meta name="apple-mobile-web-app-title" content="justusanttila.fi">
-   <meta name="application-name" content="justusanttila.fi">
-   <meta name="msapplication-TileColor" content="#ffc40d">
-   <meta name="theme-color" content="#000000"> <!-- Updated to black for dark theme -->
 
-   <!-- Fontti: Poppins -->
-   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;700&display=swap" rel="stylesheet"> <!-- Added weights for variety -->
-
-   <!-- Structured Data (JSON-LD for SEO) -->
+   <!-- Page-Specific Structured Data (JSON-LD for SEO: WebSite + Organization) -->
    <script type="application/ld+json">
    {
       "@context": "https://schema.org",
-      "@type": "Person",
-      "name": "Justus Anttila",
-      "jobTitle": "Videotuotanto",
-      "url": "https://justusanttila.fi",
-      "email": "info@justusanttila.fi",
-      "address": {
-         "@type": "PostalAddress",
-         "addressLocality": "Turku",
-         "addressCountry": "FI"
+      "@type": "WebSite",
+      "name": "Videotuotanto Justus Anttila",
+      "description": "Ammattimainen videotuotanto Turusta",
+      "url": "https://justusanttila.fi/",
+      "potentialAction": {
+         "@type": "SearchAction",
+         "target": "https://justusanttila.fi/search?q={search_term_string}",
+         "query-input": "required name=search_term_string"
       },
-      "sameAs": [
-         "https://www.youtube.com/channel/UCig1_rJ-hfGG3bxtLcEuC_Q",
-         "https://www.instagram.com/justus.anttila/"
-      ]
+      "publisher": {
+         "@type": "Organization",
+         "name": "Videotuotanto Justus Anttila",
+         "email": "info@justusanttila.fi",
+         "address": {
+            "@type": "PostalAddress",
+            "addressLocality": "Turku",
+            "postalCode": "20540",
+            "addressCountry": "FI"
+         }
+      }
    }
    </script>
-
-   <!-- Clicky Analytics -->
-   <script>var clicky_site_ids = clicky_site_ids || []; clicky_site_ids.push(101281409);</script>
-   <script async src="//static.getclicky.com/js"></script>
-
-   <!-- Calendar (Commented Out - Uncomment and add JS if needed) -->
-   <!-- <script src="color-calendar/bundle.js" defer></script> -->
-   <!-- <link rel="stylesheet" href="color-calendar/css/theme-basic.css"> -->
 </head>
 
 <body>
-   <!-- Skip to Content Link for Accessibility -->
-   <a href="#main-content" class="sr-only">Hyppää pääsisältöön</a>
-
    <!-- Navigation Header -->
    <header class="nav" role="banner">
       <a href="/" aria-label="Etusivu">
@@ -75,7 +53,7 @@
       </a>
       <nav role="navigation" aria-label="Päävalikko">
          <ul>
-            <li><a href="/">Etusivu</a></li>
+            <li><a href="/" aria-current="page">Etusivu</a></li>
             <li><a href="portfolio.html">Portfolio</a></li>
             <li><a href="hinnasto.html">Hinnasto</a></li>
             <li><a href="yhteydenotto.html">Yhteydenotto</a></li>
@@ -101,44 +79,55 @@
 
       <!-- About Section -->
       <section id="about" class="divteksti fade-in" role="region" aria-labelledby="about-heading">
-         <h2 id="about-heading">Minusta</h2>
-         <div class="logo">
-            <a href="https://www.youtube.com/channel/UCig1_rJ-hfGG3bxtLcEuC_Q" target="_blank" rel="noopener" aria-label="YouTube-kanava">
-               <img src="/img/youtubesvg.svg" alt="YouTube">
-            </a>
-            <a href="https://www.instagram.com/justus.anttila/" target="_blank" rel="noopener" aria-label="Instagram">
-               <img src="/img/instagramsvg.svg" alt="Instagram">
-            </a>
+         <div class="about-content">
+            <div class="about-text">
+               <div class="logo">
+                  <a href="https://www.youtube.com/channel/UCig1_rJ-hfGG3bxtLcEuC_Q" target="_blank" rel="noopener" aria-label="YouTube-kanava">
+                     <img src="/img/youtubesvg.svg" alt="YouTube">
+                  </a>
+                  <a href="https://www.instagram.com/justus.anttila/" target="_blank" rel="noopener" aria-label="Instagram">
+                     <img src="/img/instagramsvg.svg" alt="Instagram">
+                  </a>
+               </div>
+               <h2 id="about-heading">Minusta</h2>
+               <p>
+                  Nimeni on Justus Anttila ja olen elokuva- ja videokuvaaja.
+               </p>
+               <p>
+                  Olen tehnyt kuvaushommia vuodesta 2020. Olen tehnyt muun muassa mainosvideoita, musiikkivideoita, häävideoita ja lyhytelokuvia.
+               </p>
+               <p>
+                  Tällä hetkellä asun Jyväskylässä, mutta matkustan matalalla kynnyksellä minnepäin vain.
+               </p>
+               <p>
+                  Toimin tehokkaasti yhden miehen kokoonpanolla, joten pystyn pitämään kulut kurissa. Laadusta ei silti tarvitse tinkiä, sillä kokemusta hommista on reilusti.
+               </p>
+            </div>
+            <div class="about-image">
+               <img src="img/profiilikuva.jpg" alt="Justus Anttila profiilikuva" class="profile-image">
+            </div>
          </div>
-         <p>
-            Nimeni on <strong>Justus Anttila</strong> ja olen elokuva- ja videokuvaaja <strong>Turusta</strong> ja olen tehnyt kuvaushommia vuodesta 2020. Olen tehnyt muun muassa mainosvideoita, musiikkivideoita, häävideoita ja lyhytelokuvia.
-         </p>
-         <p>
-            <strong>Toimin tehokkaasti</strong> yhden miehen kokoonpanolla, joten pystyn pitämään kulut kurissa. Laadusta ei silti tarvitse tinkiä, sillä kokemusta hommista on reilusti.
-         </p>
       </section>
 
       <!-- Pricing Teaser Section -->
       <section id="pricing-teaser" class="divteksti fade-in" role="region" aria-labelledby="pricing-heading">
          <h2 id="pricing-heading">Hinnasto</h2>
          <p>Kilpailukykyiset hinnat laadukkaaseen videotuotantoon. Katso tarkemmat tiedot <a href="hinnasto.html">hinnastosivulta</a>.</p>
-         <div class="pricing-cards"> <!-- Use CSS Grid for cards in style.css if expanding -->
-            <article>
-               <h3>Häävideo alk. 1100€ (sis. alv)</h3>
-               <p>Sisältää kuvaukset vihkimisestä päivän loppuun. Teen hääpäivänne parhaista hetkistä noin 5-10 minuutin mittaisen koosteen haluamallanne taustamusiikilla.</p>
-               <a href="hinnasto.html" class="cta-button">Lisätietoja</a>
+         <div class="pricing-cards">
+            <article class="pricing-card">
+               <h3>Häävideo</h3>
+               <p class="price">Alk. 1100€ (sis. alv)</p>
             </article>
-            <article>
-               <h3>Musiikkivideo alk. 1000€ (sis. alv)</h3>
-               <p>Perinteikäs tai vähän erikoisempi. Juuri sinunlaisesi musiikkivideo.</p>
-               <a href="hinnasto.html" class="cta-button">Lisätietoja</a>
+            <article class="pricing-card">
+               <h3>Musiikkivideo</h3>
+               <p class="price">Alk. 1000€ (sis. alv)</p>
             </article>
-            <article>
-               <h3>Mainosvideo yritykselle alk. 1000€ (+alv)</h3>
-               <p>Kuvaamisen lisäksi hoidan myös käsikirjoittamisen toiveidenne mukaisesti.</p>
-               <a href="hinnasto.html" class="cta-button">Lisätietoja</a>
+            <article class="pricing-card">
+               <h3>Mainosvideo yritykselle</h3>
+               <p class="price">Alk. 1000€ (+alv)</p>
             </article>
          </div>
+         <a href="hinnasto.html" class="cta-button">Lisätietoja</a>
       </section>
 
       <!-- Portfolio Teaser Section -->
@@ -168,6 +157,7 @@
                Victoria ja Kinu
             </a>
          </div>
+         <a href="portfolio.html" class="cta-button">Katso koko portfolio</a>
       </section>
 
       <!-- Contact Teaser Section -->
@@ -185,9 +175,9 @@
    <!-- Footer -->
    <footer class="loppu" role="contentinfo">
       <p>Y-tunnus: 3158053-8</p>
-      <p id="textright">20540 Turku</p>
+      <p id="textright">40500 Jyväskylä</p>
    </footer>
 
-    <script defer src="js/script.js"></script>
+   <script defer src="js/script.js"></script>
 </body>
 </html>
