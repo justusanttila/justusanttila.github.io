@@ -51,7 +51,7 @@ const featured = getFeaturedVideos();
             <h2>{home.aboutHeading}</h2>
             {home.aboutParagraphs.map((p) => <p>{p}</p>)}
           </div>
-          <div>
+          <div class="about-photo">
             <img class="about-img" src="/img/profiilikuva.jpg" alt="Justus Anttila" loading="lazy" />
           </div>
         </div>
@@ -83,7 +83,7 @@ const featured = getFeaturedVideos();
             </div>
           ))}
         </div>
-        <button class="btn btn-ghost" data-nav="hinnasto">
+        <button class="btn btn-primary" data-nav="hinnasto">
           {home.pricingTeaserCta}
         </button>
       </div>
@@ -208,7 +208,7 @@ const featured = getFeaturedVideos();
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 0.5rem;
+    gap: 0.72rem;
     padding: 2rem 1rem;
     text-align: center;
   }
@@ -218,7 +218,7 @@ const featured = getFeaturedVideos();
     animation: heroLogoFade 1.4s cubic-bezier(0.4,0,0.2,1) both;
   }
   .hero-title {
-    font-size: clamp(1.2rem, 4vw, 2.25rem);
+    font-size: clamp(1.36rem, 4vw, 2.25rem);
     font-weight: 700;
     letter-spacing: 0.18em;
     text-transform: uppercase;
@@ -236,6 +236,36 @@ const featured = getFeaturedVideos();
   @keyframes heroTitleFade {
     from { opacity: 0; transform: translateY(8px); }
     to   { opacity: 1; transform: translateY(0); }
+  }
+  .about-photo {
+    display: flex;
+    justify-content: center;
+  }
+  .about-img {
+    width: min(100%, 420px);
+  }
+  @media (max-width: 900px) {
+    .hero {
+      min-height: clamp(220px, 42vh, 420px);
+    }
+    .hero-logo {
+      width: min(84vw, 440px);
+    }
+  }
+  @media (max-width: 680px) {
+    .hero {
+      min-height: clamp(200px, 36vh, 340px);
+    }
+    .hero-content {
+      padding: 1.5rem 0.4rem;
+      gap: 0.8rem;
+    }
+    .hero-logo {
+      width: min(92vw, 420px);
+    }
+    .about-img {
+      width: min(84vw, 300px);
+    }
   }
   .featured-list {
     display: flex;

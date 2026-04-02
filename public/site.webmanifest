@@ -1,6 +1,9 @@
 {
     "name": "justusanttila.fi",
     "short_name": "justusanttila.fi",
+    "start_url": "/",
+    "scope": "/",
+    "display": "standalone",
     "icons": [
         {
             "src": "/android-chrome-192x192.png",
@@ -13,6 +16,6 @@
             "type": "image/png"
         }
     ],
-    "theme_color": "#ffffff",
-    "background_color": "#ffffff"
+    "theme_color": "#090909",
+    "background_color": "#090909"
 }

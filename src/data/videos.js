@@ -5,7 +5,7 @@
  *   id:          YouTube video ID (the part after watch?v= or youtu.be/)
  *   title:       Display title
  *   description: Short description shown under the video
- *   featured:    true → appears on the home page teaser (optional)
+ *   featured:    number → lower number appears higher on home page teaser (optional)
  */
 
 export const videoCategories = [
@@ -24,10 +24,15 @@ export const videos = {
     intro: 'Tekemiäni mainosvideoita eri yritysasiakkaille.',
     items: [
       {
+        id: 'VQMspQF6A_M',
+        title: 'Turun päivä 2025',
+        description: 'Tapahtumakooste Turun päivän 2025 tunnelmista.',
+        featured: 1,
+      },
+      {
         id: 'p_IRrpFw7zM',
         title: 'Turun päivä 2024',
-        description: 'Tapahtumakohoste Turun päivän 2024 tunnelmista.',
-        featured: true,
+        description: 'Tapahtumakooste Turun päivän 2024 tunnelmista.',
       },
       {
         id: 'lFAp9xn3WGU',
@@ -47,20 +52,30 @@ export const videos = {
     intro: 'Perinteikäs tai vähän erikoisempi musiikkivideo.',
     items: [
       {
+        id: 'pdSqCGR8epU',
+        title: 'HURMOX - Kiirekiire',
+        description: 'Energinen biisi ja musiikkivideo arjen kiireestä.',
+        featured: 2
+      },
+      {
         id: 'ztX8xv-4Yys',
         title: 'Vapausaste – Olet ihminen',
         description: 'Musiikkivideo Vapausasteen kappaleelle Olet ihminen.',
-        featured: true,
       },
       {
         id: 'EpbMHqssn0k',
         title: 'Jessica ja Bålder – Jouluna',
-        description: 'Jouluinen musiikkivideo Jessica ja Bålderille.',
+        description: 'Jouluinen musiikkivideo, jossa Jessica ja Bålder Quartet yhdistävät voimansa.',
       },
       {
         id: 'puMBpccmGBA',
         title: 'Bålder Quartet – La Folia',
-        description: 'Klassinen musiikkivideo Bålder Quartetille.',
+        description: 'Klassinen musiikkivideo Bålder Quartetille Vivaldin La Folia sävellyksestä',
+      },
+      {
+        id: 'XWU9Gp-FiDU',
+        title: 'Bålder Quartet – Verano Porteño',
+        description: 'Toinen klassinen musiikkivideo Bålder Quartetille tällä kertaa kappaleena Piazzollan Verano Porteño eli kesä. Tästä tehtiin myös muut vuodenajat.',
       },
     ],
   },
@@ -70,15 +85,20 @@ export const videos = {
     intro: 'Tarinan voi kertoa myös lyhyessä ajassa.',
     items: [
       {
+        id: 'tRztWATosW0',
+        title: 'Menneisyyden Säröt',
+        description: 'Salaperäinen kutsu kokoaa joukon nuoria aikuisia mökille viikonloppua viettämään. Viikonlopun aikana vanhat ihmissuhteet, käsittelemätön suru ja menneisyyden ristiriidat alkavat nousta pintaan. Jokaisen on kohdattava, mitä on yrittänyt vältellä ja päättämään, jatkaako eteenpäin vai jääkö kiinni menneeseen.',
+        featured: 3,
+      },
+      {
         id: '2kdkR3WONfo',
         title: 'Kuulustelu',
-        description: 'Lyhytelokuva jännitteisestä kuulustelusta.',
-        featured: true,
+        description: 'Tuntematon nainen on hyökännyt rikollisporukan kimppuun ja hänet on vangittu. Kuka hän oikein on ja miksi hän on lähtenyt tappelemaan rikollisten kanssa?',
       },
       {
         id: 'U69ruqeYK58',
         title: 'Vuosisadan bileet',
-        description: 'Komedia opiskelijabileistä.',
+        description: 'Draamaa ja komediaa bileissä. Nuoren tytön vanhemmat lähtevät lomalle, joten tyttö päättää tietenkin kutsua kaverinsa bileisiin. Kaikki ei kuitenkaan ole, miltä näyttää.',
       },
       {
         id: 'dPR-NBE5b6E',
@@ -111,7 +131,6 @@ export const videos = {
         id: 'lPNuScLXPxQ',
         title: 'Frozen day',
         description: 'Tyylivideo talvisessa maisemassa.',
-        featured: true,
       },
       {
         id: 'KaGq6oV4rOI',
@@ -121,7 +140,7 @@ export const videos = {
       {
         id: 'L6q9L16jB00',
         title: 'Drone',
-        description: 'Ilmakuvausdemo droonella.',
+        description: 'Ilmakuvausdemo dronella.',
       },
       {
         id: 'MfwuvPpw99E',
@@ -197,13 +216,21 @@ export const videos = {
 };
 
 /**
- * Returns all videos marked with featured: true, with their category label.
- * Edit the featured flag above to control what appears on the home page.
+ * Returns all videos marked with featured:number, with category labels.
+ * Lower featured value appears first. Ties keep original declaration order.
  */
 export function getFeaturedVideos() {
-  return Object.values(videos).flatMap((cat) =>
-    cat.items
-      .filter((v) => v.featured)
-      .map((v) => ({ ...v, categoryLabel: cat.heading }))
+  const flatVideos = Object.values(videos).flatMap((cat) =>
+    cat.items.map((v) => ({ ...v, categoryLabel: cat.heading }))
   );
+
+  return flatVideos
+    .map((v, orderIndex) => ({
+      ...v,
+      __rank: typeof v.featured === 'number' ? v.featured : null,
+      __order: orderIndex,
+    }))
+    .filter((v) => v.__rank !== null && Number.isFinite(v.__rank))
+    .sort((a, b) => a.__rank - b.__rank || a.__order - b.__order)
+    .map(({ __rank, __order, ...video }) => video);
 }

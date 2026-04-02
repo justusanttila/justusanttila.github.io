@@ -81,26 +81,87 @@ const { id, title } = Astro.props;
 </style>
 
 <script>
+  let didWarmConnections = false;
+
+  function warmConnections() {
+    if (didWarmConnections) return;
+    didWarmConnections = true;
+
+    const origins = [
+      'https://www.youtube-nocookie.com',
+      'https://www.google.com',
+      'https://www.googlevideo.com',
+      'https://i.ytimg.com',
+      'https://s.ytimg.com',
+    ];
+
+    origins.forEach((href) => {
+      const link = document.createElement('link');
+      link.rel = 'preconnect';
+      link.href = href;
+      link.crossOrigin = '';
+      document.head.appendChild(link);
+    });
+  }
+
+  function buildEmbedSrc(id: string, autoplay: boolean) {
+    return `https://www.youtube-nocookie.com/embed/${id}?autoplay=${autoplay ? '1' : '0'}&rel=0&modestbranding=1&playsinline=1`;
+  }
+
+  function createIframe(id: string, title: string, autoplay: boolean) {
+    const iframe = document.createElement('iframe');
+    iframe.src = buildEmbedSrc(id, autoplay);
+    iframe.title = title;
+    iframe.allow =
+      'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture';
+    iframe.allowFullscreen = true;
+    // Astro's scoped CSS won't apply to dynamically-created elements, so set inline:
+    iframe.style.cssText = 'position:absolute;inset:0;width:100%;height:100%;border:none';
+    return iframe;
+  }
+
+  function prewarmIframe(el: HTMLDivElement) {
+    if (el.dataset.prewarmed === '1' || el.querySelector('iframe')) return;
+
+    const id = el.dataset.videoId!;
+    const title = el.dataset.videoTitle ?? '';
+    const iframe = createIframe(id, title, false);
+    iframe.style.opacity = '0';
+    iframe.style.pointerEvents = 'none';
+    el.appendChild(iframe);
+    el.dataset.prewarmed = '1';
+  }
+
   document.querySelectorAll<HTMLDivElement>('.lite-yt').forEach((el) => {
+    const prewarm = () => {
+      warmConnections();
+      prewarmIframe(el);
+    };
+
+    el.addEventListener('pointerenter', warmConnections, { once: true });
+    el.addEventListener('focusin', prewarm, { once: true });
+    el.addEventListener('pointerdown', prewarm, { once: true });
+    el.addEventListener('touchstart', prewarm, { once: true, passive: true });
+
     el.addEventListener('click', () => {
-      if (el.querySelector('iframe')) return;
+      warmConnections();
 
       const id = el.dataset.videoId!;
       const title = el.dataset.videoTitle ?? '';
+      let iframe = el.querySelector('iframe');
 
-      const iframe = document.createElement('iframe');
-      iframe.src = `https://www.youtube.com/embed/${id}?autoplay=1&rel=0`;
-      iframe.title = title;
-      iframe.allow =
-        'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture';
-      iframe.allowFullscreen = true;
-      // Astro's scoped CSS won't apply to dynamically-created elements, so set inline:
-      iframe.style.cssText = 'position:absolute;inset:0;width:100%;height:100%;border:none';
+      if (!iframe) {
+        iframe = createIframe(id, title, true);
+        el.appendChild(iframe);
+      } else {
+        iframe.src = buildEmbedSrc(id, true);
+        iframe.style.opacity = '1';
+        iframe.style.pointerEvents = 'auto';
+      }
 
       // Hide thumbnail and play button
       el.querySelector('img')?.remove();
       el.querySelector('.yt-play-btn')?.remove();
-      el.appendChild(iframe);
     });
   });
 </script>

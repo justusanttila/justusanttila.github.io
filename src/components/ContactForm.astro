@@ -4,7 +4,7 @@
  * Handles validation, EmailJS submission, status messages.
  * Update the data-emailjs-* attributes with real credentials.
  */
-import { contact, meta } from '../data/content.js';
+import { contact } from '../data/content.js';
 ---
 
 <form
@@ -14,9 +14,9 @@ import { contact, meta } from '../data/content.js';
   data-submit-label={contact.formSubmit}
   data-success-msg={contact.formSuccess}
   data-error-msg={contact.formError}
-  data-emailjs-public-key="YOUR_EMAILJS_PUBLIC_KEY"
-  data-emailjs-service="YOUR_SERVICE_ID"
-  data-emailjs-template="YOUR_TEMPLATE_ID"
+  data-emailjs-public-key="K4EU0hUxba4JqN1uJ"
+  data-emailjs-service="service_q0n0tuu"
+  data-emailjs-template="template_2j9qclg"
 >
   <div class="form-field">
     <label for="name">{contact.labels.name} *</label>
@@ -171,10 +171,41 @@ import { contact, meta } from '../data/content.js';
       try {
         // @ts-ignore – emailjs loaded externally
         if (typeof emailjs !== 'undefined' && pubKey && serviceId && templateId) {
+          const nameValue = (form.querySelector<HTMLInputElement>('#name')?.value ?? '').trim();
+          const emailValue = (form.querySelector<HTMLInputElement>('#email')?.value ?? '').trim();
+          const messageValue = (form.querySelector<HTMLTextAreaElement>('#message')?.value ?? '').trim();
+          const serviceSelect = form.querySelector<HTMLSelectElement>('#service');
+          const selectedService = (serviceSelect?.value ?? '').trim();
+          const legacyServiceValueMap: Record<string, string> = {
+            kiinteisto: 'kiinteistovideo',
+            oma: 'omavideo',
+          };
+          const rawService = legacyServiceValueMap[selectedService] ?? selectedService;
+          const serviceMap: Record<string, string> = {
+            haavideo: 'Häävideo',
+            musiikkivideo: 'Musiikkivideo',
+            yritysvideo: 'Yritysvideo',
+            kiinteisto: 'Kiinteistövideo',
+            kiinteistovideo: 'Kiinteistövideo',
+            oma: 'Oma video',
+            omavideo: 'Oma video',
+            muu: 'Jotain muuta',
+          };
+          const formattedService = rawService
+            ? (serviceMap[rawService] ?? serviceSelect?.selectedOptions?.[0]?.textContent?.trim() ?? rawService)
+            : 'Ei valittu';
+          const params = {
+            name: nameValue,
+            email: emailValue,
+            service: rawService,
+            formattedService,
+            message: messageValue,
+          };
+
           // @ts-ignore
           emailjs.init(pubKey);
           // @ts-ignore
-          await emailjs.sendForm(serviceId, templateId, form);
+          await emailjs.send(serviceId, templateId, params);
         }
         showStatus('success', form.dataset.successMsg ?? 'Viesti lähetetty!');
         form.reset();

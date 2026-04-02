@@ -18,11 +18,41 @@ function navigate(sectionId) {
   window.scrollTo({ top: 0, behavior: 'instant' });
 }
 
+function restartHomeHeroLogo() {
+  const heroLogo = document.querySelector('.hero-logo');
+  if (!(heroLogo instanceof HTMLVideoElement)) return;
+
+  const replay = () => {
+    heroLogo.pause();
+    heroLogo.currentTime = 0;
+    const playPromise = heroLogo.play();
+    if (playPromise && typeof playPromise.catch === 'function') {
+      playPromise.catch(() => {});
+    }
+  };
+
+  if (heroLogo.readyState >= 2) {
+    replay();
+  } else {
+    heroLogo.addEventListener('loadeddata', replay, { once: true });
+    heroLogo.load();
+  }
+
+  // Keep the fade animation in sync with replay.
+  heroLogo.style.animation = 'none';
+  void heroLogo.offsetWidth;
+  heroLogo.style.animation = '';
+}
+
 function activateSection(id) {
   document.querySelectorAll('.page-section').forEach((el) => {
     el.classList.toggle('active', el.dataset.section === id);
   });
   scheduleReveal();
+
+  if (id === 'home') {
+    restartHomeHeroLogo();
+  }
 }
 
 document.addEventListener('click', (e) => {
