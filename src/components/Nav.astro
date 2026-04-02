@@ -1,0 +1,89 @@
+---
+/**
+ * Nav.astro — Sticky navigation island with animated hamburger menu.
+ * Listens for 'app:navigate' event to close the mobile menu and update active state.
+ */
+import { nav, meta } from '../data/content.js';
+
+const links = [
+  { section: 'home',         label: nav.homeLabel,      href: '/' },
+  { section: 'portfolio',    label: nav.portfolioLabel,  href: '#portfolio' },
+  { section: 'hinnasto',     label: nav.pricingLabel,    href: '#hinnasto' },
+  { section: 'yhteydenotto', label: nav.contactLabel,    href: '#yhteydenotto' },
+];
+---
+
+<header class="site-nav">
+  <a href="/" class="logo" data-nav="home" aria-label="Etusivu">
+    <img src="/img/nimitekstisvg.svg" alt="Justus Anttila – Videotuotanto" />
+  </a>
+
+  <nav aria-label="Päävalikko">
+    <ul class="nav-links" id="nav-links" role="list">
+      {links.map((l) => (
+        <li>
+          <a href={l.href} data-nav={l.section}>{l.label}</a>
+        </li>
+      ))}
+    </ul>
+  </nav>
+
+  <button
+    class="hamburger"
+    id="hamburger"
+    aria-label={nav.menuAriaLabel}
+    aria-expanded="false"
+    type="button"
+  >
+    <span></span>
+    <span></span>
+    <span></span>
+  </button>
+</header>
+
+<script>
+  const hamburger = document.getElementById('hamburger') as HTMLButtonElement | null;
+  const navLinksEl = document.getElementById('nav-links') as HTMLUListElement | null;
+
+  function openMenu() {
+    navLinksEl?.classList.remove('closing');
+    navLinksEl?.classList.add('open');
+    hamburger?.setAttribute('aria-expanded', 'true');
+  }
+
+  function closeMenu() {
+    if (!navLinksEl?.classList.contains('open')) return;
+    hamburger?.setAttribute('aria-expanded', 'false');
+    navLinksEl.classList.add('closing');
+    navLinksEl.addEventListener(
+      'animationend',
+      () => navLinksEl.classList.remove('open', 'closing'),
+      { once: true }
+    );
+  }
+
+  hamburger?.addEventListener('click', () => {
+    hamburger.getAttribute('aria-expanded') === 'true' ? closeMenu() : openMenu();
+  });
+
+  // Close when clicking outside the nav
+  document.addEventListener('click', (e) => {
+    if (
+      navLinksEl?.classList.contains('open') &&
+      !(e.target as Element).closest('.site-nav')
+    ) {
+      closeMenu();
+    }
+  });
+
+  // Close + update active state on SPA navigation
+  document.addEventListener('app:navigate', (e) => {
+    closeMenu();
+    const section = (e as CustomEvent<string>).detail;
+    document.querySelectorAll<HTMLAnchorElement>('[data-nav]').forEach((el) => {
+      el.dataset.nav === section
+        ? el.setAttribute('data-active', '')
+        : el.removeAttribute('data-active');
+    });
+  });
+</script>

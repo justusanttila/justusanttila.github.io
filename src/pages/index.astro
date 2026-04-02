@@ -1,71 +1,55 @@
----
+﻿---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import { home, portfolio, pricing as pricingContent, contact, nav, meta } from '../data/content.js';
-import { videos, videoCategories, featuredVideos } from '../data/videos.js';
+import Nav from '../components/Nav.astro';
+import VideoCard from '../components/VideoCard.astro';
+import PortfolioSection from '../components/PortfolioSection.astro';
+import FaqAccordion from '../components/FaqAccordion.astro';
+import ContactForm from '../components/ContactForm.astro';
+import { home, portfolio, pricing as pricingContent, contact, meta } from '../data/content.js';
+import { getFeaturedVideos } from '../data/videos.js';
 import { services, faq } from '../data/pricing.js';
+
+const featured = getFeaturedVideos();
 ---
 
 <BaseLayout
   title={home.pageTitle}
   description={home.metaDescription}
 >
-  <!-- ─── Navigation ─────────────────────────────────────────────────── -->
-  <header class="site-nav">
-    <a href="/" class="logo" aria-label="Etusivu">
-      <img src="/img/nimitekstisvg.svg" alt="Justus Anttila – Videotuotanto" />
-    </a>
-
-    <nav aria-label="Päävalikko">
-      <ul class="nav-links" role="list">
-        <li><a href="/" data-nav="home">{nav.homeLabel}</a></li>
-        <li><a href="#portfolio" data-nav="portfolio">{nav.portfolioLabel}</a></li>
-        <li><a href="#hinnasto" data-nav="hinnasto">{nav.pricingLabel}</a></li>
-        <li><a href="#yhteydenotto" data-nav="yhteydenotto">{nav.contactLabel}</a></li>
-      </ul>
-    </nav>
-
-    <button class="hamburger" aria-label={nav.menuAriaLabel} aria-expanded="false">
-      <span></span><span></span><span></span>
-    </button>
-  </header>
+  <Nav />
 
   <main id="main-content">
 
-    <!-- ═══ HOME ══════════════════════════════════════════════════════ -->
+    <!-- HOME -->
     <section class="page-section" data-section="home">
 
-      <!-- Hero -->
       <div class="hero">
         <video class="hero-bg" autoplay loop muted playsinline
-               poster="/img/kansivideo.jpg"
-               aria-hidden="true">
+               poster="/img/kansivideo.jpg" aria-hidden="true">
           <source src="/img/kansivideo.webm" type="video/webm" />
         </video>
-
-        <video class="hero-logo" autoplay muted playsinline
-               aria-label="Justus Anttila – Videotuotanto animaatio">
-          <source src="/img/tekstianimaatio.webm" type="video/webm" />
-        </video>
-
-        <h1 class="hero-title">{home.heroTitle}</h1>
+        <div class="hero-content">
+          <video class="hero-logo" autoplay muted playsinline
+                 aria-label="Justus Anttila animaatio">
+            <source src="/img/tekstianimaatio.webm" type="video/webm" />
+          </video>
+          <h1 class="hero-title">{home.heroTitle}</h1>
+        </div>
       </div>
 
-      <!-- About -->
       <div class="section-block reveal">
         <div class="about-grid">
           <div>
             <div class="social-links">
-              <a href={meta.youtubeUrl} target="_blank" rel="noopener noreferrer"
-                 aria-label="YouTube-kanava">
+              <a href={meta.youtubeUrl} target="_blank" rel="noopener noreferrer" aria-label="YouTube-kanava">
                 <img src="/img/youtubesvg.svg" alt="YouTube" />
               </a>
-              <a href={meta.instagramUrl} target="_blank" rel="noopener noreferrer"
-                 aria-label="Instagram">
+              <a href={meta.instagramUrl} target="_blank" rel="noopener noreferrer" aria-label="Instagram">
                 <img src="/img/instagramsvg.svg" alt="Instagram" />
               </a>
             </div>
             <h2>{home.aboutHeading}</h2>
-            {home.aboutParagraphs.map(p => <p>{p}</p>)}
+            {home.aboutParagraphs.map((p) => <p>{p}</p>)}
           </div>
           <div>
             <img class="about-img" src="/img/profiilikuva.jpg" alt="Justus Anttila" loading="lazy" />
@@ -73,40 +57,26 @@ import { services, faq } from '../data/pricing.js';
         </div>
       </div>
 
-      <!-- Portfolio teaser -->
       <div class="section-block reveal reveal-delay-1">
         <h2>{home.portfolioTeaserHeading}</h2>
         <p>{home.portfolioTeaserText}</p>
-        <div class="featured-grid">
-          {featuredVideos.map(v => (
-            <div class="video-card">
-              <div class="video-embed">
-                <iframe
-                  data-src={`https://www.youtube.com/embed/${v.id}?rel=0`}
-                  title={v.title}
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                  allowfullscreen
-                  loading="lazy"
-                ></iframe>
-              </div>
-              <div class="video-info">
-                <h3>{v.title}</h3>
-                <p>{v.category}</p>
-              </div>
+        <div class="featured-list">
+          {featured.map((v) => (
+            <div class="featured-list-item">
+              <VideoCard id={v.id} title={v.title} description={v.description ?? v.categoryLabel} />
             </div>
           ))}
         </div>
-        <button class="btn btn-primary" data-nav="portfolio" style="margin-top:1rem">
+        <button class="btn btn-primary" data-nav="portfolio" style="margin-top:1.25rem">
           {home.portfolioTeaserCta}
         </button>
       </div>
 
-      <!-- Pricing teaser -->
       <div class="section-block reveal reveal-delay-2">
         <h2>{home.pricingTeaserHeading}</h2>
         <p>{home.pricingTeaserText}</p>
         <div class="pricing-teaser">
-          {services.slice(0, 3).map(s => (
+          {services.slice(0, 3).map((s) => (
             <div class="pricing-teaser-item">
               <h3>{s.title}</h3>
               <p class="price">{s.price}</p>
@@ -118,12 +88,12 @@ import { services, faq } from '../data/pricing.js';
         </button>
       </div>
 
-      <!-- Contact teaser -->
       <div class="section-block reveal reveal-delay-3">
         <h2>{home.contactTeaserHeading}</h2>
         <p>
-          {home.contactTeaserText.replace('info@justusanttila.fi', '')}
+          Voit ottaa minuun yhteyttä sähköpostilla{' '}
           <a href={`mailto:${meta.email}`}>{meta.email}</a>.
+          Kerro kuka olet, millaista videota tarvitset ja alustava ajankohta.
         </p>
         <button class="btn btn-primary" data-nav="yhteydenotto">
           {home.contactTeaserCta}
@@ -132,61 +102,15 @@ import { services, faq } from '../data/pricing.js';
 
     </section>
 
-    <!-- ═══ PORTFOLIO ═════════════════════════════════════════════════ -->
+    <!-- PORTFOLIO -->
     <section class="page-section" data-section="portfolio">
 
       <div class="section-block reveal">
         <h1>{portfolio.heading}</h1>
         <p>{portfolio.intro}</p>
+        <PortfolioSection />
       </div>
 
-      <div class="section-block reveal">
-        <!-- Tab buttons -->
-        <nav class="tab-bar" aria-label="Portfolio-kategoriat">
-          {videoCategories.map((cat, i) => (
-            <button
-              class="tab-btn"
-              data-tab={cat.id}
-              aria-selected={i === 0 ? 'true' : 'false'}
-              role="tab"
-            >
-              {cat.label}
-            </button>
-          ))}
-        </nav>
-
-        <!-- Tab panels -->
-        {videoCategories.map((cat, i) => {
-          const section = videos[cat.id];
-          return (
-            <div class={`tab-panel${i === 0 ? ' active' : ''}`} data-panel={cat.id} role="tabpanel">
-              <h2>{section.heading}</h2>
-              <p>{section.intro}</p>
-              <div class="video-grid">
-                {section.items.map(vid => (
-                  <div class="video-card">
-                    <div class="video-embed">
-                      <iframe
-                        data-src={`https://www.youtube.com/embed/${vid.id}?rel=0`}
-                        title={vid.title}
-                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                        allowfullscreen
-                        loading="lazy"
-                      ></iframe>
-                    </div>
-                    <div class="video-info">
-                      <h3>{vid.title}</h3>
-                      <p>{vid.description}</p>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          );
-        })}
-      </div>
-
-      <!-- CTA -->
       <div class="section-block reveal">
         <h2>{portfolio.ctaHeading}</h2>
         <p>{portfolio.ctaText}</p>
@@ -197,7 +121,7 @@ import { services, faq } from '../data/pricing.js';
 
     </section>
 
-    <!-- ═══ HINNASTO ══════════════════════════════════════════════════ -->
+    <!-- HINNASTO -->
     <section class="page-section" data-section="hinnasto">
 
       <div class="section-block reveal">
@@ -208,7 +132,7 @@ import { services, faq } from '../data/pricing.js';
       <div class="section-block reveal">
         <h2>{pricingContent.servicesHeading}</h2>
         <div class="pricing-grid">
-          {services.map(s => (
+          {services.map((s) => (
             <article class="pricing-card">
               <h3>{s.title}</h3>
               <p class="price">{s.price}</p>
@@ -221,23 +145,15 @@ import { services, faq } from '../data/pricing.js';
         </div>
       </div>
 
-      <!-- FAQ -->
       <div class="section-block reveal">
         <h2>{pricingContent.faqHeading}</h2>
         <p>{pricingContent.faqIntro}</p>
-        <div class="faq-list">
-          {faq.map(item => (
-            <details class="faq-item">
-              <summary>{item.question}</summary>
-              <div class="faq-body">{item.answer}</div>
-            </details>
-          ))}
-        </div>
+        <FaqAccordion items={faq} />
       </div>
 
     </section>
 
-    <!-- ═══ YHTEYDENOTTO ══════════════════════════════════════════════ -->
+    <!-- YHTEYDENOTTO -->
     <section class="page-section" data-section="yhteydenotto">
 
       <div class="section-block reveal">
@@ -245,74 +161,92 @@ import { services, faq } from '../data/pricing.js';
         <p>
           {contact.intro} Sähköposti: <a href={`mailto:${meta.email}`}>{meta.email}</a>.
         </p>
-      </div>
-
-      <div class="section-block reveal">
-        <h2>{contact.formHeading}</h2>
-
-        <form
-          id="contact-form"
-          class="contact-form"
-          novalidate
-          data-submit-label={contact.formSubmit}
-          data-success-msg={contact.formSuccess}
-          data-error-msg={contact.formError}
-          data-emailjs-public-key="YOUR_EMAILJS_PUBLIC_KEY"
-          data-emailjs-service="YOUR_SERVICE_ID"
-          data-emailjs-template="YOUR_TEMPLATE_ID"
-        >
-          <div class="form-field">
-            <label for="name">{contact.labels.name} *</label>
-            <input type="text" id="name" name="name" required aria-required="true" />
-            <span class="field-error" aria-live="polite"></span>
-          </div>
-
-          <div class="form-field">
-            <label for="email">{contact.labels.email} *</label>
-            <input type="email" id="email" name="email" required aria-required="true" />
-            <span class="field-error" aria-live="polite"></span>
-          </div>
-
-          <div class="form-field">
-            <label for="service">{contact.labels.service}</label>
-            <select id="service" name="service">
-              {contact.serviceOptions.map(opt => (
-                <option value={opt.value}>{opt.label}</option>
-              ))}
-            </select>
-          </div>
-
-          <div class="form-field">
-            <label for="message">{contact.labels.message} *</label>
-            <textarea id="message" name="message" required aria-required="true"></textarea>
-            <span class="field-error" aria-live="polite"></span>
-          </div>
-
-          <div id="form-status" class="form-status" aria-live="polite"></div>
-
-          <button type="submit" class="btn btn-primary">{contact.formSubmit}</button>
-        </form>
+        <ContactForm />
       </div>
 
     </section>
 
   </main>
 
-  <!-- ─── Footer ─────────────────────────────────────────────────────── -->
   <footer class="site-footer">
     <span>Y-tunnus: {meta.businessId}</span>
     <span>{meta.postalCode} {meta.city}</span>
   </footer>
 
-  <!-- EmailJS -->
   <script
     src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"
     is:inline
   ></script>
 
-  <!-- App -->
   <script>
     import '../scripts/app.js';
   </script>
 
 </BaseLayout>
+
+<style>
+  .hero {
+    position: relative;
+    overflow: hidden;
+    min-height: clamp(280px, 52vh, 580px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .hero-bg {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: brightness(0.4);
+    z-index: 0;
+  }
+  .hero-content {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 2rem 1rem;
+    text-align: center;
+  }
+  .hero-logo {
+    width: min(68vw, 460px);
+    height: auto;
+    animation: heroLogoFade 1.4s cubic-bezier(0.4,0,0.2,1) both;
+  }
+  .hero-title {
+    font-size: clamp(1.2rem, 4vw, 2.25rem);
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.75);
+    text-shadow: 0 2px 16px rgba(0,0,0,0.8);
+    margin: 0;
+    user-select: none;
+    -webkit-user-select: none;
+    animation: heroTitleFade 1.8s cubic-bezier(0.4,0,0.2,1) 0.7s both;
+  }
+  @keyframes heroLogoFade {
+    from { opacity: 0; transform: translateY(-10px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes heroTitleFade {
+    from { opacity: 0; transform: translateY(8px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  .featured-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    margin: 1.25rem 0 0;
+  }
+  .featured-list-item {
+    padding: 1.5rem 0;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+  }
+  .featured-list-item:first-child { padding-top: 0; }
+  .featured-list-item:last-child  { border-bottom: none; padding-bottom: 0; }
+</style>

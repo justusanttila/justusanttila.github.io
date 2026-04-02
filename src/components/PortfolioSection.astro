@@ -1,0 +1,92 @@
+---
+/**
+ * PortfolioSection.astro — Tab-based portfolio grid island.
+ * Each tab panel shows videos in a vertical list with large previews.
+ */
+import VideoCard from './VideoCard.astro';
+import { videoCategories, videos } from '../data/videos.js';
+---
+
+<div class="portfolio-tabs">
+  <nav class="tab-bar" role="tablist" aria-label="Portfolio-kategoriat">
+    {videoCategories.map((cat, i) => (
+      <button
+        class="tab-btn"
+        data-tab={cat.id}
+        aria-selected={i === 0 ? 'true' : 'false'}
+        role="tab"
+        type="button"
+      >
+        {cat.label}
+      </button>
+    ))}
+  </nav>
+
+  {videoCategories.map((cat, i) => {
+    const section = videos[cat.id];
+    return (
+      <div
+        class={`tab-panel${i === 0 ? ' active' : ''}`}
+        data-panel={cat.id}
+        role="tabpanel"
+      >
+        <p class="tab-intro">{section.intro}</p>
+        <div class="video-list">
+          {section.items.map((vid) => (
+            <div class="video-list-item">
+              <VideoCard id={vid.id} title={vid.title} description={vid.description} />
+            </div>
+          ))}
+        </div>
+      </div>
+    );
+  })}
+</div>
+
+<style>
+  .tab-intro {
+    font-size: 0.9rem;
+    color: var(--text-muted, #a0a0a0);
+    margin: 0 0 1.5rem;
+  }
+
+  .video-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .video-list-item {
+    padding: 1.75rem 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  }
+
+  .video-list-item:first-child {
+    padding-top: 0;
+  }
+
+  .video-list-item:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+  }
+</style>
+
+<script>
+  const tabBar = document.querySelector<HTMLElement>('.tab-bar');
+  if (tabBar) {
+    tabBar.addEventListener('click', (e) => {
+      const btn = (e.target as HTMLElement).closest<HTMLButtonElement>('.tab-btn');
+      if (!btn) return;
+
+      const target = btn.dataset.tab;
+
+      tabBar.querySelectorAll<HTMLButtonElement>('.tab-btn').forEach((b) => {
+        b.setAttribute('aria-selected', b === btn ? 'true' : 'false');
+      });
+
+      document.querySelectorAll<HTMLElement>('.tab-panel').forEach((p) => {
+        p.classList.toggle('active', p.dataset.panel === target);
+      });
+    });
+  }
+</script>

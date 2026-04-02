@@ -22,7 +22,10 @@
 }
 
 /* ─── Reset ──────────────────────────────────────────────────────────── */
-*, *::before, *::after { box-sizing: border-box; }
+*, *::before, *::after {
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+}
 
 html {
   scroll-behavior: smooth;
@@ -154,6 +157,7 @@ a:focus-visible {
   color: var(--text);
   flex-direction: column;
   gap: 5px;
+  -webkit-tap-highlight-color: transparent;
 }
 .hamburger span {
   display: block;
@@ -186,6 +190,11 @@ a:focus-visible {
     animation: slideDown 0.25s var(--ease) both;
   }
 
+  .site-nav .nav-links.closing {
+    display: flex;
+    animation: slideUp 0.22s var(--ease) both;
+  }
+
   .site-nav .nav-links a {
     padding: 0.75rem 0.5rem;
     font-size: 1rem;
@@ -196,6 +205,11 @@ a:focus-visible {
 @keyframes slideDown {
   from { opacity: 0; transform: translateY(-8px); }
   to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slideUp {
+  from { opacity: 1; transform: translateY(0); }
+  to   { opacity: 0; transform: translateY(-8px); }
 }
 
 /* ─── Page Layout ────────────────────────────────────────────────────── */
@@ -229,56 +243,14 @@ main { min-height: calc(100vh - var(--nav-h)); }
   box-shadow: var(--shadow);
 }
 
-/* ─── Hero ───────────────────────────────────────────────────────────── */
+/* ─── Hero ── (structure handled per-page in <style>) ───────────────── */
 .hero {
   position: relative;
   overflow: hidden;
-  min-height: clamp(300px, 55vh, 600px);
+  min-height: clamp(280px, 52vh, 580px);
   display: flex;
   align-items: center;
   justify-content: center;
-}
-
-.hero-bg {
-  position: absolute;
-  inset: 0;
-  width: 100%; height: 100%;
-  object-fit: cover;
-  filter: brightness(0.45);
-  z-index: 0;
-}
-
-.hero-logo {
-  position: absolute;
-  width: min(70vw, 480px);
-  height: auto;
-  z-index: 2;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  animation: heroLogoFade 1.5s var(--ease) both;
-}
-
-.hero-title {
-  position: relative;
-  z-index: 3;
-  font-size: clamp(2.5rem, 9vw, 5rem);
-  font-weight: 700;
-  letter-spacing: -0.02em;
-  color: #fff;
-  text-shadow: 0 2px 20px rgba(0,0,0,0.7);
-  margin: 0;
-  animation: heroTitleFade 2s var(--ease) 0.5s both;
-}
-
-@keyframes heroLogoFade {
-  from { opacity: 0; transform: translate(-50%, -42%); }
-  to   { opacity: 1; transform: translate(-50%, -50%); }
-}
-
-@keyframes heroTitleFade {
-  from { opacity: 0; transform: translateY(16px); }
-  to   { opacity: 1; transform: translateY(0); }
 }
 
 /* ─── Scroll-reveal ──────────────────────────────────────────────────── */
@@ -460,100 +432,16 @@ main { min-height: calc(100vh - var(--nav-h)); }
   to   { opacity: 1; transform: translateY(0); }
 }
 
-/* ─── Video grid ─────────────────────────────────────────────────────── */
-.video-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(min(100%, 320px), 1fr));
-  gap: 1.5rem;
-  margin-top: 1.5rem;
-}
-
-.video-card {
-  background: var(--bg);
-  border-radius: var(--radius);
-  overflow: hidden;
-  border: 1px solid rgba(255,255,255,0.06);
-  transition: transform var(--dur) var(--ease), box-shadow var(--dur) var(--ease);
-}
-.video-card:hover {
-  transform: translateY(-4px);
-  box-shadow: var(--shadow-hover);
-}
-
-.video-embed {
-  position: relative;
-  width: 100%;
-  aspect-ratio: 16/9;
-  background: #000;
-}
-.video-embed iframe {
-  position: absolute;
-  inset: 0;
-  width: 100%; height: 100%;
-  border: none;
-  border-radius: 0;
-}
-
-.video-info {
-  padding: 0.9rem 1rem;
-}
-.video-info h3 {
-  font-size: 0.95rem;
-  margin-bottom: 0.35rem;
-  color: var(--text);
-}
-.video-info p {
-  font-size: 0.82rem;
-  color: var(--text-muted);
-  margin: 0;
-  line-height: 1.45;
-}
-
-/* ─── Featured video grid (home) ─────────────────────────────────────── */
+/* ─── Video list (portfolio + featured) ─────────────────────────────── */
+/* Layout handled by VideoCard and PortfolioSection components.
+   This file only provides the shared list wrapper. */
+.video-grid,
 .featured-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(min(100%, 280px), 1fr));
-  gap: 1.25rem;
-  margin: 1.5rem 0;
+  display: none; /* Legacy — replaced by component-based layout */
 }
 
-/* ─── FAQ accordion ──────────────────────────────────────────────────── */
-.faq-list { margin-top: 1.25rem; display: flex; flex-direction: column; gap: 0.5rem; }
-
-.faq-item {
-  border: 1px solid rgba(255,255,255,0.08);
-  border-radius: var(--radius-sm);
-  overflow: hidden;
-}
-.faq-item summary {
-  list-style: none;
-  padding: 1rem 1.25rem;
-  cursor: pointer;
-  font-weight: 500;
-  font-size: 0.95rem;
-  color: var(--text);
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 1rem;
-  transition: background var(--dur) var(--ease);
-}
-.faq-item summary:hover { background: rgba(255,255,255,0.04); }
-.faq-item summary::after {
-  content: '+';
-  font-size: 1.25rem;
-  color: var(--accent);
-  flex-shrink: 0;
-  transition: transform var(--dur) var(--ease);
-}
-.faq-item[open] summary::after { transform: rotate(45deg); }
-.faq-item[open] summary { background: rgba(255,255,255,0.04); }
-.faq-item .faq-body {
-  padding: 0 1.25rem 1rem;
-  font-size: 0.9rem;
-  color: var(--text-muted);
-  line-height: 1.6;
-}
+/* ─── FAQ accordion ── (animation handled in FaqAccordion.astro) ─────── */
+.faq-list { display: none; } /* Legacy, kept for safety */
 
 /* ─── Contact form ───────────────────────────────────────────────────── */
 .contact-form {

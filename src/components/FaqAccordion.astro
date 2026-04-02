@@ -1,0 +1,169 @@
+---
+/**
+ * FaqAccordion.astro — Animated accordion using CSS grid-template-rows trick.
+ * Each item animates open/close smoothly. Self-contained island.
+ */
+interface Item {
+  question: string;
+  answer: string;
+}
+
+interface Props {
+  items: Item[];
+}
+
+const { items } = Astro.props;
+---
+
+<div class="faq-accordion">
+  {items.map((item, i) => (
+    <div class="faq-item" data-faq>
+      <button
+        class="faq-trigger"
+        type="button"
+        aria-expanded="false"
+        aria-controls={`faq-body-${i}`}
+      >
+        <span class="faq-question">{item.question}</span>
+        <span class="faq-icon" aria-hidden="true"></span>
+      </button>
+      <div class="faq-body" id={`faq-body-${i}`} aria-hidden="true">
+        <div class="faq-body-inner">
+          <p>{item.answer}</p>
+        </div>
+      </div>
+    </div>
+  ))}
+</div>
+
+<style>
+  .faq-accordion {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    margin-top: 1.25rem;
+  }
+
+  .faq-item {
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+
+  /* ── Trigger ─────────────────────── */
+  .faq-trigger {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    padding: 0.85rem 1.1rem;
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--text, #f0f0f0);
+    font-family: var(--font, inherit);
+    font-size: 0.88rem;
+    font-weight: 500;
+    text-align: left;
+    -webkit-tap-highlight-color: transparent;
+    transition: background 0.2s ease;
+  }
+
+  .faq-trigger:hover,
+  .faq-trigger[aria-expanded="true"] {
+    background: rgba(255, 255, 255, 0.04);
+  }
+
+  .faq-question {
+    flex: 1;
+    line-height: 1.4;
+  }
+
+  /* ── Plus/minus icon ─────────────── */
+  .faq-icon {
+    flex-shrink: 0;
+    width: 16px;
+    height: 16px;
+    position: relative;
+  }
+
+  .faq-icon::before,
+  .faq-icon::after {
+    content: '';
+    position: absolute;
+    background: var(--accent, #ff6b35);
+    border-radius: 2px;
+    transition: transform 0.3s ease, opacity 0.3s ease;
+  }
+
+  /* vertical bar */
+  .faq-icon::before {
+    width: 2px;
+    height: 14px;
+    top: 1px;
+    left: 7px;
+  }
+
+  /* horizontal bar */
+  .faq-icon::after {
+    width: 14px;
+    height: 2px;
+    top: 7px;
+    left: 1px;
+  }
+
+  /* Rotate vertical bar 90° → forms ✕ shape when open */
+  .faq-trigger[aria-expanded="true"] .faq-icon::before {
+    transform: rotate(90deg);
+    opacity: 0;
+  }
+
+  /* ── Animated body ───────────────── */
+  .faq-body {
+    display: grid;
+    grid-template-rows: 0fr;
+    transition: grid-template-rows 0.3s ease;
+  }
+
+  .faq-body[aria-hidden="false"] {
+    grid-template-rows: 1fr;
+  }
+
+  .faq-body-inner {
+    overflow: hidden;
+  }
+
+  .faq-body-inner p {
+    margin: 0;
+    padding: 0.5rem 1.1rem 0.9rem;
+    font-size: 0.85rem;
+    color: var(--text-muted, #a0a0a0);
+    line-height: 1.65;
+    border-top: 1px solid rgba(255, 255, 255, 0.06);
+  }
+</style>
+
+<script>
+  document.querySelectorAll<HTMLElement>('[data-faq]').forEach((item) => {
+    const trigger = item.querySelector<HTMLButtonElement>('.faq-trigger')!;
+    const body = item.querySelector<HTMLElement>('.faq-body')!;
+    if (!trigger || !body) return;
+
+    trigger.addEventListener('click', () => {
+      const isOpen = trigger.getAttribute('aria-expanded') === 'true';
+
+      // Close all sibling items
+      item.closest('.faq-accordion')?.querySelectorAll<HTMLElement>('[data-faq]').forEach((other) => {
+        if (other === item) return;
+        const t = other.querySelector<HTMLButtonElement>('.faq-trigger')!;
+        const b = other.querySelector<HTMLElement>('.faq-body')!;
+        t?.setAttribute('aria-expanded', 'false');
+        b?.setAttribute('aria-hidden', 'true');
+      });
+
+      trigger.setAttribute('aria-expanded', isOpen ? 'false' : 'true');
+      body.setAttribute('aria-hidden', isOpen ? 'true' : 'false');
+    });
+  });
+</script>

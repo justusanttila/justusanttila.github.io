@@ -1,0 +1,213 @@
+---
+/**
+ * ContactForm.astro — Self-contained contact form island.
+ * Handles validation, EmailJS submission, status messages.
+ * Update the data-emailjs-* attributes with real credentials.
+ */
+import { contact, meta } from '../data/content.js';
+---
+
+<form
+  id="contact-form"
+  class="contact-form"
+  novalidate
+  data-submit-label={contact.formSubmit}
+  data-success-msg={contact.formSuccess}
+  data-error-msg={contact.formError}
+  data-emailjs-public-key="YOUR_EMAILJS_PUBLIC_KEY"
+  data-emailjs-service="YOUR_SERVICE_ID"
+  data-emailjs-template="YOUR_TEMPLATE_ID"
+>
+  <div class="form-field">
+    <label for="name">{contact.labels.name} *</label>
+    <input type="text" id="name" name="name" required aria-required="true" autocomplete="name" />
+    <span class="field-error" aria-live="polite"></span>
+  </div>
+
+  <div class="form-field">
+    <label for="email">{contact.labels.email} *</label>
+    <input type="email" id="email" name="email" required aria-required="true" autocomplete="email" />
+    <span class="field-error" aria-live="polite"></span>
+  </div>
+
+  <div class="form-field">
+    <label for="service">{contact.labels.service}</label>
+    <select id="service" name="service">
+      {contact.serviceOptions.map((opt) => (
+        <option value={opt.value}>{opt.label}</option>
+      ))}
+    </select>
+  </div>
+
+  <div class="form-field">
+    <label for="message">{contact.labels.message} *</label>
+    <textarea id="message" name="message" required aria-required="true"></textarea>
+    <span class="field-error" aria-live="polite"></span>
+  </div>
+
+  <div id="form-status" class="form-status" aria-live="polite"></div>
+
+  <button type="submit" class="btn btn-primary submit-btn">
+    {contact.formSubmit}
+  </button>
+</form>
+
+<style>
+  .contact-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    max-width: 600px;
+    margin-top: 1.5rem;
+  }
+
+  .form-field {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+  }
+
+  .form-field label {
+    font-size: 0.82rem;
+    font-weight: 500;
+    color: var(--text, #f0f0f0);
+  }
+
+  .form-field input,
+  .form-field select,
+  .form-field textarea {
+    padding: 0.65rem 0.85rem;
+    border-radius: 6px;
+    border: 1px solid rgba(255, 255, 255, 0.13);
+    background: var(--bg, #090909);
+    color: var(--text, #f0f0f0);
+    font-family: var(--font, inherit);
+    font-size: 0.95rem;
+    outline: none;
+    -webkit-tap-highlight-color: transparent;
+    transition: border-color 0.25s ease;
+  }
+
+  .form-field input:focus,
+  .form-field select:focus,
+  .form-field textarea:focus {
+    border-color: var(--link, #5bc8ff);
+  }
+
+  .form-field input.invalid,
+  .form-field textarea.invalid {
+    border-color: #ff5555;
+  }
+
+  .form-field textarea {
+    resize: vertical;
+    min-height: 120px;
+  }
+
+  .form-field select option {
+    background: #1a1a1a;
+  }
+
+  .field-error {
+    font-size: 0.76rem;
+    color: #ff6666;
+    min-height: 1em;
+  }
+
+  .form-status {
+    padding: 0.7rem 1rem;
+    border-radius: 6px;
+    font-size: 0.88rem;
+    display: none;
+  }
+
+  .form-status.success {
+    display: block;
+    background: rgba(0, 200, 100, 0.1);
+    color: #4caf7a;
+    border: 1px solid rgba(0, 200, 100, 0.2);
+  }
+
+  .form-status.error {
+    display: block;
+    background: rgba(255, 68, 68, 0.1);
+    color: #ff6666;
+    border: 1px solid rgba(255, 68, 68, 0.2);
+  }
+
+  .submit-btn {
+    align-self: flex-start;
+    width: auto;
+  }
+</style>
+
+<script>
+  const form = document.getElementById('contact-form') as HTMLFormElement | null;
+  if (form) {
+    const pubKey = form.dataset.emailjsPublicKey;
+    const serviceId = form.dataset.emailjsService;
+    const templateId = form.dataset.emailjsTemplate;
+    const statusEl = document.getElementById('form-status') as HTMLElement;
+    const submitBtn = form.querySelector<HTMLButtonElement>('button[type="submit"]')!;
+
+    // Inline validation on blur/input
+    form.querySelectorAll<HTMLInputElement | HTMLTextAreaElement>(
+      'input[required], textarea[required]'
+    ).forEach((field) => {
+      field.addEventListener('blur', () => validateField(field));
+      field.addEventListener('input', () => {
+        if (field.classList.contains('invalid')) validateField(field);
+      });
+    });
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      if (!validateAll()) return;
+
+      const originalText = submitBtn.textContent ?? '';
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Lähetetään…';
+
+      try {
+        // @ts-ignore – emailjs loaded externally
+        if (typeof emailjs !== 'undefined' && pubKey && serviceId && templateId) {
+          // @ts-ignore
+          emailjs.init(pubKey);
+          // @ts-ignore
+          await emailjs.sendForm(serviceId, templateId, form);
+        }
+        showStatus('success', form.dataset.successMsg ?? 'Viesti lähetetty!');
+        form.reset();
+      } catch {
+        showStatus('error', form.dataset.errorMsg ?? 'Virhe. Yritä uudelleen tai lähetä sähköpostilla.');
+      } finally {
+        submitBtn.disabled = false;
+        submitBtn.textContent = originalText;
+      }
+    });
+
+    function validateAll(): boolean {
+      let ok = true;
+      form!.querySelectorAll<HTMLInputElement | HTMLTextAreaElement>(
+        'input[required], textarea[required]'
+      ).forEach((f) => { if (!validateField(f)) ok = false; });
+      return ok;
+    }
+
+    function validateField(field: HTMLInputElement | HTMLTextAreaElement): boolean {
+      const errorEl = field.parentElement?.querySelector<HTMLElement>('.field-error');
+      let msg = '';
+      if (field.validity.valueMissing) msg = 'Tämä kenttä on pakollinen.';
+      else if (field.validity.typeMismatch) msg = 'Anna kelvollinen sähköpostiosoite.';
+      field.classList.toggle('invalid', !!msg);
+      if (errorEl) errorEl.textContent = msg;
+      return !msg;
+    }
+
+    function showStatus(type: 'success' | 'error', msg: string) {
+      statusEl.className = `form-status ${type}`;
+      statusEl.textContent = msg;
+      statusEl.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+  }
+</script>

@@ -1,9 +1,11 @@
 /**
  * videos.js — Edit this file to manage portfolio videos.
+ *
  * Each video entry has:
  *   id:          YouTube video ID (the part after watch?v= or youtu.be/)
  *   title:       Display title
  *   description: Short description shown under the video
+ *   featured:    true → appears on the home page teaser (optional)
  */
 
 export const videoCategories = [
@@ -25,6 +27,7 @@ export const videos = {
         id: 'p_IRrpFw7zM',
         title: 'Turun päivä 2024',
         description: 'Tapahtumakohoste Turun päivän 2024 tunnelmista.',
+        featured: true,
       },
       {
         id: 'lFAp9xn3WGU',
@@ -47,6 +50,7 @@ export const videos = {
         id: 'ztX8xv-4Yys',
         title: 'Vapausaste – Olet ihminen',
         description: 'Musiikkivideo Vapausasteen kappaleelle Olet ihminen.',
+        featured: true,
       },
       {
         id: '0dm6Oq77f7s',
@@ -69,6 +73,7 @@ export const videos = {
         id: '2kdkR3WONfo',
         title: 'Kuulustelu',
         description: 'Lyhytelokuva jännitteisestä kuulustelusta.',
+        featured: true,
       },
       {
         id: 'U69ruqeYK58',
@@ -106,6 +111,7 @@ export const videos = {
         id: 'lPNuScLXPxQ',
         title: 'Frozen day',
         description: 'Tyylivideo talvisessa maisemassa.',
+        featured: true,
       },
       {
         id: 'KaGq6oV4rOI',
@@ -157,6 +163,7 @@ export const videos = {
         id: '1zE0N9esQes',
         title: 'Victoria ja Kinu',
         description: 'Tunnelmakas häävideo Victorialle ja Kinulle.',
+        featured: true,
       },
     ],
   },
@@ -191,13 +198,13 @@ export const videos = {
 };
 
 /**
- * Featured videos shown on the home page teaser section.
- * Use YouTube IDs from the videos above.
+ * Returns all videos marked with featured: true, with their category label.
+ * Edit the featured flag above to control what appears on the home page.
  */
-export const featuredVideos = [
-  { id: 'p_IRrpFw7zM', title: 'Turun päivä 2024',        category: 'Yritysvideo' },
-  { id: 'ztX8xv-4Yys', title: 'Vapausaste – Olet ihminen', category: 'Musiikkivideo' },
-  { id: '2kdkR3WONfo', title: 'Kuulustelu',               category: 'Lyhytelokuva' },
-  { id: 'lPNuScLXPxQ', title: 'Frozen day',               category: 'Tyylivideo' },
-  { id: '1zE0N9esQes', title: 'Victoria ja Kinu',         category: 'Häävideo' },
-];
+export function getFeaturedVideos() {
+  return Object.values(videos).flatMap((cat) =>
+    cat.items
+      .filter((v) => v.featured)
+      .map((v) => ({ ...v, categoryLabel: cat.heading }))
+  );
+}
