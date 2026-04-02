@@ -53,7 +53,7 @@ export const videos = {
         featured: true,
       },
       {
-        id: '0dm6Oq77f7s',
+        id: 'EpbMHqssn0k',
         title: 'Jessica ja Bålder – Jouluna',
         description: 'Jouluinen musiikkivideo Jessica ja Bålderille.',
       },
@@ -157,13 +157,12 @@ export const videos = {
   haavideot: {
     heading: 'Häävideot',
     intro:
-      'Tekemäni häävideo muutaman vuoden takaa. Kalusto on ehtinyt päivittyä ja ote parantua tämän videon jälkeen.',
+      ' ',
     items: [
       {
         id: '1zE0N9esQes',
         title: 'Victoria ja Kinu',
-        description: 'Tunnelmakas häävideo Victorialle ja Kinulle.',
-        featured: true,
+        description: 'Tekemäni häävideo muutaman vuoden takaa. Kalusto on ehtinyt päivittyä ja ote parantua tämän videon jälkeen.',
       },
     ],
   },

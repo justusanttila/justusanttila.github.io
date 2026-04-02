@@ -94,6 +94,8 @@ const { id, title } = Astro.props;
       iframe.allow =
         'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture';
       iframe.allowFullscreen = true;
+      // Astro's scoped CSS won't apply to dynamically-created elements, so set inline:
+      iframe.style.cssText = 'position:absolute;inset:0;width:100%;height:100%;border:none';
 
       // Hide thumbnail and play button
       el.querySelector('img')?.remove();
