@@ -43,7 +43,7 @@ export const home = {
   pricingTeaserHeading: 'Hinnasto',
   pricingTeaserText:
     'Kilpailukykyiset hinnat laadukkaaseen videotuotantoon.',
-  pricingTeaserCta: 'Lisätietoja',
+  pricingTeaserCta: 'Katso koko hinnasto',
 
   contactTeaserHeading: 'Ota yhteyttä',
   contactTeaserText:
